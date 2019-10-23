@@ -9,3 +9,19 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r data}
+library(readxl)
+defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
+str(defense)
+offense <- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
+bio <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
+```
+
+```{r cleanup}
+defense$Name = as.factor(defense$Name)
+bio$Name = as.factor(bio$Name)
+offense$Name = as.factor(offense$Name)
+defense$Opponent_Opponent = as.factor(defense$Opponent_Opponent)
+offense$Opponent_Opponent = as.factor(offense$Opponent_Opponent)
+
+```
