@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
 ```
 
 ```{r data}
@@ -23,5 +25,37 @@ bio$Name = as.factor(bio$Name)
 offense$Name = as.factor(offense$Name)
 defense$Opponent_Opponent = as.factor(defense$Opponent_Opponent)
 offense$Opponent_Opponent = as.factor(offense$Opponent_Opponent)
+defense$Tackles_Solo = as.numeric(defense$Tackles_Solo)
+defense$Tackles_ASST= as.numeric(defense$Tackles_ASST)
+defense$Tackles_TFL= as.numeric(defense$Tackles_TFL)
+defense$Tackles_Sack= as.numeric(defense$Tackles_Sack)
+defense$Turnover_FF= as.numeric(defense$Turnover_FF)
+defense$Turnover_FR= as.numeric(defense$Turnover_FR)
+defense$Turnover_INT= as.numeric(defense$Turnover_INT)
+defense$Pass_PB= as.numeric(defense$Pass_PB)
+defense$Pass_QBH= as.numeric(defense$Pass_QBH)
 
+offense$Receiving_REC =as.numeric(offense$Receiving_REC)
+offense$Receiving_YDS =as.numeric(offense$Receiving_YDS)
+offense$Receiving_TD =as.numeric(offense$Receiving_TD)
+offense$Rushing_ATT =as.numeric(offense$Rushing_ATT)
+offense$Rushing_YDS =as.numeric(offense$Rushing_YDS)
+offense$Rushing_TD =as.numeric(offense$Rushing_TD)
+offense$`Passing_CMP-ATT` =as.numeric(offense$`Passing_CMP-ATT`)
+offense$Passing_YDS =as.numeric(offense$Passing_YDS)
+offense$Passing_TD =as.numeric(offense$Passing_TD)
+offense$Passing_INT =as.numeric(offense$Passing_INT)
+```
+
+```{r height}
+bioClean =bio %>% separate(Height, c('ft', 'in'),sep = "([-])")
+bioClean$ft =as.numeric(bioClean$ft)
+bioClean$`in` = as.numeric(bioClean$`in`)
+bioClean$Height<-NA
+bioClean <- mutate(bioClean,Height= ((ft*12)+`in`))
+```
+
+```{r clean}
+defClean = defense
+offClean = offense
 ```
