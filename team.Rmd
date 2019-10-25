@@ -79,3 +79,31 @@ School = spread(School, Statistic, Number)
 ggplot(School, aes(Tackles_Solo, color = Opponent_Opponent)) + geom_bar() + ggtitle("Kansas State vs. West Virginia")
 ```
 The graph shows that ISU had a better defense against Kansas State.
+
+
+```{r}
+bioClean <- bioClean %>% separate(Hometown, into= c('City', 'State'), sep=', ')
+
+table(bioClean$State)
+
+```
+
+```{r}
+offenseBioClean <- inner_join(offense, bioClean, by = 'Name')
+
+head(offenseBioClean, 10)
+```
+
+```{r}
+ggplot(offenseBioClean, aes(Weight, Receiving_YDS)) + geom_boxplot(color = "red")
+
+```
+Hakeem Butler did the bulk of receiving for Iowa State, so his weight is shown to be responsible for the highest amount of yards.
+
+
+What state produces most of the team's rushing touchdowns?
+
+```{r}
+ggplot(offenseBioClean, aes(State, Rushing_TD)) + geom_col(color = "darkred")
+
+```
