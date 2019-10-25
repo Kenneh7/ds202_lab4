@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 ```
 
 ```{r data}
@@ -35,13 +36,16 @@ defense$Turnover_INT= as.numeric(defense$Turnover_INT)
 defense$Pass_PB= as.numeric(defense$Pass_PB)
 defense$Pass_QBH= as.numeric(defense$Pass_QBH)
 
+offense = offense %>% separate(`Passing_CMP-ATT`, c('CMP', 'ATT'),sep = "([-])")
+
 offense$Receiving_REC =as.numeric(offense$Receiving_REC)
 offense$Receiving_YDS =as.numeric(offense$Receiving_YDS)
 offense$Receiving_TD =as.numeric(offense$Receiving_TD)
 offense$Rushing_ATT =as.numeric(offense$Rushing_ATT)
 offense$Rushing_YDS =as.numeric(offense$Rushing_YDS)
 offense$Rushing_TD =as.numeric(offense$Rushing_TD)
-offense$`Passing_CMP-ATT` =as.numeric(offense$`Passing_CMP-ATT`)
+offense$CMP =as.numeric(offense$CMP)
+offense$ATT =as.numeric(offense$ATT)
 offense$Passing_YDS =as.numeric(offense$Passing_YDS)
 offense$Passing_TD =as.numeric(offense$Passing_TD)
 offense$Passing_INT =as.numeric(offense$Passing_INT)
@@ -59,3 +63,19 @@ bioClean <- mutate(bioClean,Height= ((ft*12)+`in`))
 defClean = defense
 offClean = offense
 ```
+
+```{r tidyr}
+defClean = defClean %>% gather(Statistic, Number, 3:11)
+
+defClean$Statistic = as.factor(defClean$Statistic)
+ggplot(defClean, aes(Number)) + geom_histogram() + facet_wrap( ~ defClean$Statistic)
+```
+The Facet Wrap shows that the defensive skill Turnovers are rare.
+
+```{r WV}
+School = filter(defClean, Opponent_Opponent == "West Virginia" | Opponent_Opponent == "Kansas State")
+School = spread(School, Statistic, Number)
+
+ggplot(School, aes(Tackles_Solo, color = Opponent_Opponent)) + geom_bar() + ggtitle("Kansas State vs. West Virginia")
+```
+The graph shows that ISU had a better defense against Kansas State.
